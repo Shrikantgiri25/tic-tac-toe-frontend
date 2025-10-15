@@ -8,19 +8,23 @@ class GameWebSocket {
     this.socket = new WebSocket(url);
 
     this.socket.onopen = () => {
+      console.log('WebSocket connected to game:', gameId);
       toast.success('Connected to game');
     };
 
     this.socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
+      console.log('WebSocket message received:', data);
       onMessage(data);
     };
 
-    this.socket.onerror = () => {
+    this.socket.onerror = (error) => {
+      console.error('WebSocket error:', error);
       toast.error('Connection error occurred');
     };
 
-    this.socket.onclose = () => {
+    this.socket.onclose = (event) => {
+      console.log('WebSocket closed:', event.code, event.reason);
       toast.info('Disconnected from game');
     };
   }
