@@ -126,6 +126,3 @@ The frontend communicates with a Django REST API backend that provides:
 5. Test your changes
 6. Submit a pull request
 
-## License
-
-This project is licensed under the MIT License.
