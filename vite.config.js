@@ -5,5 +5,7 @@ export default defineConfig({
   plugins: [react()],
   build: {
     outDir: 'build', // change output directory
+    assetsDir: 'assets',
   },
+  base: './',
 })
