@@ -9,6 +9,8 @@ export default defineConfig({
   },
   base: './',
   server: {
-    historyApiFallback: true,
+    historyApiFallback: {
+      index: '/index.html',
+    },
   },
 })
