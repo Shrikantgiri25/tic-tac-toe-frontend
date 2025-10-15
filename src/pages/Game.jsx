@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { toast } from 'react-toastify';
@@ -16,15 +16,19 @@ const Game = () => {
   const wsRef = useRef(null);
 
   useEffect(() => {
+    if (!gameId) return;
+
     const ws = new GameWebSocket(gameId, handleWebSocketMessage);
     wsRef.current = ws;
 
     return () => {
-      ws.close();
+      if (wsRef.current) {
+        wsRef.current.close();
+      }
     };
   }, [gameId]);
 
-  const handleWebSocketMessage = (data) => {
+  const handleWebSocketMessage = useCallback((data) => {
     if (data.type === 'game_state') {
       const newGame = { ...data.game };
       setGame(newGame);
@@ -50,7 +54,7 @@ const Game = () => {
       toast.error(data.message);
       setTimeout(() => setError(''), 3000);
     }
-  };
+  }, [user, refreshUser]);
 
   const handleCellClick = (position) => {
     if (!game || game.status !== 'in_progress') return;
@@ -64,7 +68,12 @@ const Game = () => {
   };
 
   if (!game) {
-    return <div className="loading-container">Loading game...</div>;
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+        <p>Loading game...</p>
+      </div>
+    );
   }
 
   const isGameOver = game.status === 'finished';

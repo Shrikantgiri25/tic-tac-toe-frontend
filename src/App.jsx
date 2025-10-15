@@ -16,7 +16,7 @@ const PrivateRoute = ({ children }) => {
     return <div className="loading-screen">Loading...</div>;
   }
 
-  return user ? children : <Navigate to="/login" />;
+  return user ? children : <Navigate to="/login" replace />;
 };
 
 function App() {
