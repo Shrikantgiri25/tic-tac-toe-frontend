@@ -8,6 +8,9 @@ const API_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/
 const api = axios.create({
   baseURL: API_URL,
   withCredentials: true, // Needed if using cookies/CSRF in future
+  headers: {
+    'Content-Type': 'application/json',
+  },
 });
 
 // Request interceptor to attach JWT access token and optional CSRF token
@@ -49,7 +52,7 @@ api.interceptors.response.use(
           // Retry original request with new access token
           originalRequest.headers.Authorization = `Bearer ${res.data.access}`;
           return api(originalRequest);
-        } catch (refreshError) {
+        } catch {
           // Refresh token failed
           localStorage.removeItem("access_token");
           localStorage.removeItem("refresh_token");
